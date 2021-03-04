@@ -1,5 +1,7 @@
 import React from 'react';
-import { classnames, DataGrid, useThemeProps } from '@material-ui/data-grid';
+import '../App.css';
+import Paper from '@material-ui/core/Paper';
+import { Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -7,40 +9,17 @@ import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
-    root : {
+    root: {
         width: "100%",
         marginTop: theme.spacing(3),
         overflowX: "auto"
     },
 
-    dataGrid : {
-        color: "white"
-    },
-
-    process : {
-        margin : theme.spacing(2)
+    table: {
+        minWidth: "580"
     }
 });
 
-const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstName', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
-    {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.getValue('firstName') || ''}${params.getValue('lastName') || ''}`,
-    },
-    { field: 'sex', headerName: 'Age', width: 90 },
-    { field: 'age', headerName: 'Age', type: 'number', width: 90 },
-    { field: 'rank', headerName: 'rank', width: 90 },
-    { field: 'career', headerName: 'career', width: 90 }
-];
-  
 function CircularProgressWithLabel(props) {
     return (
         <Box position="relative" display="inline-flex">
@@ -81,7 +60,7 @@ class Employee extends React.Component {
 
     // server.js api 호출
     callApi = async() => {
-        const response = await fetch('/home');
+        const response = await fetch('/api/employee');
         const body = await response.json();
         return body;
     };
@@ -93,16 +72,56 @@ class Employee extends React.Component {
     };
 
     render() {
+
         const { classes } = this.props;
+
         return (
-            <div style={{ height: 400, width: '90%', backgroundColor: 'dark'}}>
+            // <div style={{ height: 400, width: '90%', backgroundColor: 'dark'}}>
+            //     {this.state.employees.length > 0 
+            //         ?   <DataGrid className={classes.dataGrid} rows={this.state.employees} columns={columns} pageSize={5} checkboxSelection/>
+            //         :
+            //         <React.Fragment>
+            //             <CircularProgressWithLabel className={classes.progress} variant="determinate" value={this.state.completed} />
+            //             <LinearProgress className={classes.progress} variant="determinate" value={this.state.completed} />
+            //         </React.Fragment>
+            //     }
+            // </div>
+            <div style={{ height: 400, width: '50%', backgroundColor: 'dark'}}>
                 {this.state.employees.length > 0 
-                    ?   <DataGrid className={classes.dataGrid} rows={this.state.employees} columns={columns} pageSize={5} checkboxSelection/>
+                    ?
+                    <Paper className={classes.root}>
+                        <Table className={classes.table}>
+                            <TableHead>
+                            <TableRow>
+                                    <TableCell>번호</TableCell>
+                                    <TableCell>이미지</TableCell>
+                                    <TableCell>이름</TableCell>
+                                    <TableCell>생년월일</TableCell>
+                                    <TableCell>성별</TableCell>
+                                    <TableCell>직급</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {this.state.employees.map(c => {
+                                    return (
+                                    <TableRow>
+                                        <TableCell>{c.id}</TableCell>
+                                        <TableCell><img src={c.image} alt="profile"/></TableCell>
+                                        <TableCell>{c.name}</TableCell>
+                                        <TableCell>{c.birthday}</TableCell>
+                                        <TableCell>{c.gender}</TableCell>
+                                        <TableCell>{c.rank}</TableCell>
+                                    </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </Paper>   
                     :
-                    <React.Fragment>
-                        <CircularProgressWithLabel className={classes.progress} variant="determinate" value={this.state.completed} />
+                    <div>
+                        {/* <CircularProgressWithLabel className={classes.progress} variant="determinate" value={this.state.completed} /> */}
                         <LinearProgress className={classes.progress} variant="determinate" value={this.state.completed} />
-                    </React.Fragment>
+                    </div>
                 }
             </div>
         )
