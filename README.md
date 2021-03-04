@@ -11,3 +11,5 @@ yarn version : v1.22.10
 front-client : react
 
 back-end service : node + express
+
+AWS RDS : instance ( gtintranet ) , host ( gtintranet.c1dvihjoyxil.ap-northeast-2.rds.amazonaws.com ), user / user1234
