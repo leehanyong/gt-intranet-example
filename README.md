@@ -10,5 +10,4 @@ yarn version : v1.22.10
 
 front-client : react
 
-back-end service : Language - Python
-                   Framework - Django + Django Rest Framework 
+back-end service : node + express
